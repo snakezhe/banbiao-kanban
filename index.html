@@ -350,6 +350,156 @@
     }
     .brand h1 { font-size: 22px; }
   }
+  /* ===== 人员排班查询 ===== */
+  .person-search {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .ps-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 14px;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent);
+  }
+  .ps-search-box {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 18px;
+  }
+  .ps-search-box input {
+    flex: 1;
+    padding: 10px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .ps-search-box input:focus {
+    border-color: var(--accent);
+    background: #fff;
+  }
+  .ps-search-box button {
+    padding: 10px 24px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-family: inherit;
+  }
+  .ps-search-box button:hover {
+    background: var(--accent-deep);
+  }
+  .ps-result:empty { display: none; }
+  .ps-person-card {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 16px;
+  }
+  .ps-person-info {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    background: var(--accent-soft);
+    border-bottom: 1px solid var(--line);
+    flex-wrap: wrap;
+  }
+  .ps-person-name {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--accent-deep);
+  }
+  .ps-person-meta {
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .ps-person-meta span {
+    margin-right: 14px;
+  }
+  .ps-calendar {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    padding: 16px 18px;
+  }
+  .ps-day {
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 6px 4px;
+    text-align: center;
+    background: #fff;
+    min-height: 52px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  .ps-day-number {
+    font-size: 11px;
+    color: var(--ink-2);
+    margin-bottom: 2px;
+  }
+  .ps-day-shift {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    word-break: break-all;
+    line-height: 1.2;
+  }
+  .ps-day.empty { background: var(--bg); }
+  .ps-day.empty .ps-day-shift { color: var(--ink-2); font-weight: 400; }
+  .ps-day.rest { background: var(--rest-soft); }
+  .ps-day.rest .ps-day-shift { color: var(--rest); }
+  .ps-day.leave { background: var(--leave-soft); }
+  .ps-day.leave .ps-day-shift { color: var(--leave); }
+  .ps-day.special { background: var(--special-soft); }
+  .ps-day.special .ps-day-shift { color: var(--special); }
+  .ps-day.quit { background: #fde8e8; border-color: #f5c6c6; }
+  .ps-day.quit .ps-day-shift { color: #c0392b; font-weight: 700; }
+  .ps-day.work { background: var(--accent-soft); }
+  .ps-day.work .ps-day-shift { color: var(--accent-deep); }
+  .ps-legend {
+    display: flex;
+    gap: 16px;
+    padding: 0 18px 14px;
+    flex-wrap: wrap;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .ps-legend-item {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .ps-legend-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 3px;
+    border: 1px solid var(--line);
+  }
+  .ps-no-result {
+    padding: 20px;
+    text-align: center;
+    color: var(--ink-2);
+    font-size: 14px;
+  }
+  @media (max-width: 768px) {
+    .ps-calendar { grid-template-columns: repeat(5, 1fr); }
+  }
+
 </style>
 </head>
 <body>
@@ -395,6 +545,16 @@
     <summary>班次说明（据排班表备注行整理）</summary>
     <div class="notes-body" id="notesBody"></div>
   </details>
+
+  <!-- ===== 人员排班查询 ===== -->
+  <section class="person-search" aria-label="人员排班查询">
+    <h2 class="ps-title">人员排班查询</h2>
+    <div class="ps-search-box">
+      <input type="text" id="personInput" placeholder="输入姓名搜索（支持模糊匹配，如输入"杰"可搜到陈杰涛）" />
+      <button id="personSearchBtn">查询</button>
+    </div>
+    <div id="personResult" class="ps-result"></div>
+  </section>
 
 </div>
 
@@ -620,6 +780,100 @@ dateStrip.addEventListener("click", function (e) {
   });
   render();
 })();
+/* ===== 人员排班查询 ===== */
+(function personSearchModule() {
+  const input = document.getElementById("personInput");
+  const btn = document.getElementById("personSearchBtn");
+  const result = document.getElementById("personResult");
+
+  // 班次分类
+  function classifyShift(s) {
+    if (!s || s.trim() === "") return "empty";
+    if (s.indexOf("离职") >= 0) return "quit";
+    if (s === "O" || s.indexOf("休息") >= 0) return "rest";
+    if (s.indexOf("假") >= 0) return "leave";
+    if (s.indexOf("职能") >= 0 || s.indexOf("巡查") >= 0) return "special";
+    return "work";
+  }
+
+  // 找某人的离职日
+  function findQuitDay(p) {
+    for (let d = 1; d <= 30; d++) {
+      const v = p.d[String(d)];
+      if (v && v.indexOf("离职") >= 0) return d;
+    }
+    return null;
+  }
+
+  function renderPerson(matches) {
+    if (matches.length === 0) {
+      result.innerHTML = '<div class="ps-no-result">未找到匹配的人员，请检查姓名是否正确</div>';
+      return;
+    }
+
+    let html = "";
+    matches.forEach(function (p) {
+      const quitDay = findQuitDay(p);
+      const daysHtml = [];
+      for (let d = 1; d <= 30; d++) {
+        let shift = p.d[String(d)] || "";
+        let cls = classifyShift(shift);
+        // 离职日之后显示"已离职"
+        if (quitDay && d > quitDay) {
+          shift = "—";
+          cls = "empty";
+        }
+        if (!shift) shift = "—";
+        daysHtml.push(
+          '<div class="ps-day ' + cls + '">' +
+            '<div class="ps-day-number">9/' + d + '</div>' +
+            '<div class="ps-day-shift">' + escapeHtml(shift) + '</div>' +
+          '</div>'
+        );
+      }
+
+      const quitInfo = quitDay ? '<span>离职日：9月' + quitDay + '日</span>' : "";
+      html +=
+        '<div class="ps-person-card">' +
+          '<div class="ps-person-info">' +
+            '<span class="ps-person-name">' + escapeHtml(p.n) + '</span>' +
+            '<div class="ps-person-meta">' +
+              '<span>工号：' + escapeHtml(p.id || "—") + '</span>' +
+              '<span>组别：' + escapeHtml(p.g) + '</span>' +
+              quitInfo +
+            '</div>' +
+          '</div>' +
+          '<div class="ps-calendar">' + daysHtml.join("") + '</div>' +
+          '<div class="ps-legend">' +
+            '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:var(--accent-soft)"></div>常规班次</div>' +
+            '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:var(--special-soft)"></div>职能/巡查</div>' +
+            '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:var(--leave-soft)"></div>请假/假期</div>' +
+            '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:var(--rest-soft)"></div>休息</div>' +
+            '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:#fde8e8;border-color:#f5c6c6"></div>离职</div>' +
+          '</div>' +
+        '</div>';
+    });
+    result.innerHTML = html;
+  }
+
+  function doSearch() {
+    const q = input.value.trim();
+    if (!q) {
+      result.innerHTML = "";
+      return;
+    }
+    const matches = DATA.people.filter(function (p) {
+      return p.n && p.n.indexOf(q) >= 0;
+    });
+    renderPerson(matches);
+  }
+
+  btn.addEventListener("click", doSearch);
+  input.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") doSearch();
+  });
+})();
+
 </script>
 </body>
 </html>
