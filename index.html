@@ -63,6 +63,16 @@
     border-radius: 6px;
     padding: 5px 10px;
   }
+  .source a {
+    color: var(--accent);
+    text-decoration: none;
+    border-bottom: 1px dashed var(--accent);
+    font-weight: 500;
+  }
+  .source a:hover {
+    color: var(--accent-deep);
+    border-bottom-style: solid;
+  }
 
   /* ===== 控制区 ===== */
   .controls {
@@ -350,7 +360,7 @@
       <h1>审核班表看板</h1>
       <p class="sub" id="monthLabel">2026年9月 · 客服&amp;审核排班</p>
     </div>
-    <div class="source">数据来源：飞书「客服&amp;审核排班9月」</div>
+    <div class="source">数据来源：<a href="https://wepie.feishu.cn/wiki/ImcjwwUHaiMEX0k86FScuNrMnph" target="_blank" rel="noopener">飞书「客服&amp;审核排班9月」</a></div>
   </header>
 
   <section class="controls">
