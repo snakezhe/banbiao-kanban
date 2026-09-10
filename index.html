@@ -638,7 +638,12 @@ for (let d = 1; d <= 30; d++) {
 
 /* 状态 */
 let curGroup = "一线审核";
-let curDay = 9;
+// 自动定位到当天日期（2026年9月内取当天，否则默认1号）
+(function () {
+  const t = new Date();
+  const d = (t.getFullYear() === 2026 && t.getMonth() === 8) ? t.getDate() : 1;
+  curDay = (d >= 1 && d <= 30) ? d : 1;
+})();
 groupSelect.value = curGroup;
 
 /* 渲染 */
