@@ -796,6 +796,20 @@ dateStrip.addEventListener("click", function (e) {
     return "work";
   }
 
+  // 为每个常规班次生成独特颜色（HSL动态着色）
+  function shiftColor(shift) {
+    let hash = 0;
+    for (let i = 0; i < shift.length; i++) {
+      hash = shift.charCodeAt(i) + ((hash << 5) - hash);
+    }
+    const hue = Math.abs(hash) % 360;
+    return {
+      bg: "hsl(" + hue + ", 48%, 90%)",
+      fg: "hsl(" + hue + ", 55%, 28%)",
+      border: "hsl(" + hue + ", 42%, 78%)"
+    };
+  }
+
   // 找某人的离职日
   function findQuitDay(p) {
     for (let d = 1; d <= 30; d++) {
@@ -824,8 +838,14 @@ dateStrip.addEventListener("click", function (e) {
           cls = "empty";
         }
         if (!shift) shift = "—";
+        // 常规班次用动态独特颜色
+        let styleAttr = "";
+        if (cls === "work") {
+          const c = shiftColor(shift);
+          styleAttr = ' style="background:' + c.bg + ';color:' + c.fg + ';border-color:' + c.border + '"';
+        }
         daysHtml.push(
-          '<div class="ps-day ' + cls + '">' +
+          '<div class="ps-day ' + cls + '"' + styleAttr + '>' +
             '<div class="ps-day-number">9/' + d + '</div>' +
             '<div class="ps-day-shift">' + escapeHtml(shift) + '</div>' +
           '</div>'
@@ -845,7 +865,7 @@ dateStrip.addEventListener("click", function (e) {
           '</div>' +
           '<div class="ps-calendar">' + daysHtml.join("") + '</div>' +
           '<div class="ps-legend">' +
-            '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:var(--accent-soft)"></div>常规班次</div>' +
+            '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:linear-gradient(135deg,#E4EFEB,#F8ECE1)"></div>常规班次（按代码自动着色）</div>' +
             '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:var(--special-soft)"></div>职能/巡查</div>' +
             '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:var(--leave-soft)"></div>请假/假期</div>' +
             '<div class="ps-legend-item"><div class="ps-legend-dot" style="background:var(--rest-soft)"></div>休息</div>' +
