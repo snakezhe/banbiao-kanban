@@ -471,6 +471,17 @@
   .ps-day.quit .ps-day-shift { color: #c0392b; font-weight: 700; }
   .ps-day.work { background: var(--accent-soft); }
   .ps-day.work .ps-day-shift { color: var(--accent-deep); }
+  .ps-day.today {
+    border: 2px solid #C23B2E;
+    box-shadow: 0 0 0 2px rgba(194, 59, 46, 0.15);
+  }
+  .ps-day-today {
+    font-size: 10px;
+    font-weight: 700;
+    color: #C23B2E;
+    margin-top: 1px;
+    letter-spacing: 1px;
+  }
   .ps-legend {
     display: flex;
     gap: 16px;
@@ -791,6 +802,10 @@ dateStrip.addEventListener("click", function (e) {
   const btn = document.getElementById("personSearchBtn");
   const result = document.getElementById("personResult");
 
+  // 当天日期（2026年9月内取当天，否则为null）
+  const now = new Date();
+  const todayDay = (now.getFullYear() === 2026 && now.getMonth() === 8 && now.getDate() >= 1 && now.getDate() <= 30) ? now.getDate() : null;
+
   // 班次分类
   function classifyShift(s) {
     if (!s || s.trim() === "") return "empty";
@@ -849,10 +864,15 @@ dateStrip.addEventListener("click", function (e) {
           const c = shiftColor(shift);
           styleAttr = ' style="background:' + c.bg + ';color:' + c.fg + ';border-color:' + c.border + '"';
         }
+        // 当天标记
+        const isToday = (todayDay !== null && d === todayDay);
+        const todayClass = isToday ? " today" : "";
+        const todayLabel = isToday ? '<div class="ps-day-today">今日</div>' : "";
         daysHtml.push(
-          '<div class="ps-day ' + cls + '"' + styleAttr + '>' +
+          '<div class="ps-day ' + cls + todayClass + '"' + styleAttr + '>' +
             '<div class="ps-day-number">9/' + d + '</div>' +
             '<div class="ps-day-shift">' + escapeHtml(shift) + '</div>' +
+            todayLabel +
           '</div>'
         );
       }
