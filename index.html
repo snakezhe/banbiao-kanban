@@ -510,6 +510,214 @@
   @media (max-width: 768px) {
     .ps-calendar { grid-template-columns: repeat(5, 1fr); }
   }
+  /* ===== 两人排班对比 ===== */
+  .compare-panel {
+    margin-top: 28px;
+    padding: 20px 24px;
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+  }
+  .cp-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 6px;
+    padding-left: 10px;
+    border-left: 3px solid var(--accent);
+  }
+  .cp-desc {
+    margin: 0 0 16px 13px;
+    font-size: 12px;
+    color: var(--ink-2);
+    line-height: 1.8;
+  }
+  .cp-inputs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .cp-input-wrap { position: relative; flex: 1 1 200px; min-width: 170px; }
+  .cp-input {
+    width: 100%;
+    padding: 10px 14px;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    background: var(--bg);
+    color: var(--ink);
+    outline: none;
+    transition: border-color .2s, background .2s;
+  }
+  .cp-input:focus { border-color: var(--accent); background: #fff; }
+  .cp-input.err { border-color: #C23B2E; background: #fff; }
+  .cp-sugg {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: #fff;
+    border: 1px solid var(--line-strong);
+    border-radius: 8px;
+    box-shadow: 0 8px 22px rgba(0, 0, 0, .10);
+    max-height: 220px;
+    overflow-y: auto;
+    z-index: 30;
+    display: none;
+  }
+  .cp-sugg-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 8px 12px;
+    font-size: 13px;
+    color: var(--ink);
+    cursor: pointer;
+  }
+  .cp-sugg-item:hover { background: var(--accent-soft); }
+  .cp-sugg-item .g { font-size: 11px; color: var(--ink-2); }
+  .cp-sugg-empty { padding: 10px 12px; font-size: 12px; color: var(--ink-2); }
+  .cp-swap, .cp-run {
+    border-radius: 8px;
+    font-size: 14px;
+    font-family: inherit;
+    cursor: pointer;
+    flex: none;
+  }
+  .cp-swap {
+    width: 42px;
+    height: 42px;
+    background: var(--bg);
+    border: 1px solid var(--line-strong);
+    color: var(--ink-2);
+    font-size: 16px;
+    line-height: 1;
+  }
+  .cp-swap:hover { background: var(--accent-soft); color: var(--accent-deep); }
+  .cp-run {
+    padding: 11px 22px;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    font-weight: 600;
+  }
+  .cp-run:hover { background: var(--accent-deep); }
+  .cp-result:empty { display: none; }
+  .cp-summary {
+    margin-top: 18px;
+    padding: 12px 16px;
+    background: var(--accent-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--accent-deep);
+  }
+  .cp-summary .sub {
+    display: block;
+    margin-top: 4px;
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--ink-2);
+  }
+  .cp-block-title {
+    margin: 18px 0 10px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: .5px;
+    color: var(--ink-2);
+  }
+  .cp-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 10px 12px;
+    margin-bottom: 8px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+  }
+  .cp-code {
+    flex: none;
+    min-width: 54px;
+    padding: 3px 9px;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--accent-deep);
+    font-size: 13px;
+    font-weight: 700;
+    text-align: center;
+    cursor: help;
+  }
+  .cp-code.rest { background: var(--rest-soft); color: var(--rest); }
+  .cp-dates { flex: 1; font-size: 13px; color: var(--ink); line-height: 1.9; }
+  .cp-dates b { font-weight: 700; color: var(--accent-deep); }
+  .cp-count { flex: none; font-size: 12px; color: var(--ink-2); }
+  .cp-cal {
+    display: grid;
+    grid-template-columns: repeat(10, 1fr);
+    gap: 6px;
+    margin-top: 6px;
+  }
+  .cp-cal-cell {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 2px;
+    min-height: 58px;
+    padding: 6px 4px;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    text-align: center;
+  }
+  .cp-cal-day { font-size: 10px; color: var(--ink-2); }
+  .cp-cal-shifts {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--ink);
+    line-height: 1.3;
+    word-break: break-all;
+  }
+  .cp-cal-tag { font-size: 10px; font-weight: 700; letter-spacing: .5px; }
+  .cp-cal-cell.same { background: var(--accent-soft); border-color: #B4D5C9; }
+  .cp-cal-cell.same .cp-cal-shifts { color: var(--accent-deep); }
+  .cp-cal-cell.same .cp-cal-tag { color: var(--accent); }
+  .cp-cal-cell.sameRest { background: var(--rest-soft); border-color: var(--line-strong); }
+  .cp-cal-cell.sameRest .cp-cal-tag { color: var(--rest); }
+  .cp-cal-cell.leave { background: var(--leave-soft); }
+  .cp-cal-cell.leave .cp-cal-shifts { color: var(--leave); font-weight: 400; }
+  .cp-cal-cell.diff .cp-cal-shifts { color: var(--ink-2); font-weight: 400; }
+  .cp-cal-cell.empty { background: var(--bg); }
+  .cp-cal-cell.empty .cp-cal-shifts { color: #B9B7AE; font-weight: 400; }
+  .cp-cal-cell.today { border: 2px solid #C23B2E; box-shadow: 0 0 0 2px rgba(194, 59, 46, .15); }
+  .cp-legend {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .cp-legend-item { display: flex; align-items: center; gap: 5px; }
+  .cp-legend-dot { width: 12px; height: 12px; border-radius: 3px; border: 1px solid var(--line); }
+  .cp-note { margin-top: 10px; font-size: 12px; line-height: 1.8; color: var(--ink-2); }
+  .cp-err {
+    margin-top: 16px;
+    padding: 16px;
+    border: 1px dashed var(--line-strong);
+    border-radius: 8px;
+    font-size: 13px;
+    color: var(--ink-2);
+    text-align: center;
+  }
+  @media (max-width: 768px) {
+    .cp-cal { grid-template-columns: repeat(5, 1fr); }
+    .cp-run { width: 100%; }
+  }
 
 </style>
 </head>
@@ -565,6 +773,27 @@
       <button id="personSearchBtn">查询</button>
     </div>
     <div id="personResult" class="ps-result"></div>
+  </section>
+
+  <!-- ===== 两人排班对比 ===== -->
+  <section class="compare-panel" aria-label="两人排班对比">
+    <h2 class="cp-title">两人排班对比</h2>
+    <p class="cp-desc">
+      选择两位同事，查看本月班次完全相同的日期。统计口径：只把「上班班次」算作相同；「职能A / 巡查E」按去掉前缀后的班次（A / E）比较；休息与各类假期单独列出，不计入相同班次。
+    </p>
+    <div class="cp-inputs">
+      <div class="cp-input-wrap">
+        <input type="text" class="cp-input" id="cpA" placeholder="第一位：输入姓名（支持模糊匹配）" autocomplete="off" aria-label="第一位同事姓名" />
+        <div class="cp-sugg" id="cpSuggA"></div>
+      </div>
+      <button type="button" class="cp-swap" id="cpSwap" title="交换两人" aria-label="交换两人">⇄</button>
+      <div class="cp-input-wrap">
+        <input type="text" class="cp-input" id="cpB" placeholder="第二位：输入姓名（支持模糊匹配）" autocomplete="off" aria-label="第二位同事姓名" />
+        <div class="cp-sugg" id="cpSuggB"></div>
+      </div>
+      <button type="button" class="cp-run" id="cpRun">开始对比</button>
+    </div>
+    <div class="cp-result" id="cpResult"></div>
   </section>
 
 </div>
@@ -917,6 +1146,237 @@ dateStrip.addEventListener("click", function (e) {
   input.addEventListener("keydown", function (e) {
     if (e.key === "Enter") doSearch();
   });
+})();
+
+/* ===== 两人排班对比 ===== */
+(function compareModule() {
+  const DAYS_N = 30;
+  const MONTH_NUM = 11;
+  const inputA = document.getElementById("cpA");
+  const inputB = document.getElementById("cpB");
+  const suggA = document.getElementById("cpSuggA");
+  const suggB = document.getElementById("cpSuggB");
+  const swapBtn = document.getElementById("cpSwap");
+  const runBtn = document.getElementById("cpRun");
+  const out = document.getElementById("cpResult");
+
+  const WD = ["日", "一", "二", "三", "四", "五", "六"];
+  const now = new Date();
+  const todayDay = (now.getFullYear() === 2026 && now.getMonth() === 10 && now.getDate() >= 1 && now.getDate() <= 30) ? now.getDate() : null;
+
+  const allPeople = DATA.people.filter(function (p) { return p.n; });
+
+  /* 离职日（离职当天及之后不再参与对比） */
+  const quitMap = {};
+  allPeople.forEach(function (p) {
+    const key = p.n + "#" + (p.id || "");
+    let q = null;
+    for (let d = 1; d <= DAYS_N; d++) {
+      const v = (p.d[String(d)] || "").trim();
+      if (v.indexOf("离职") >= 0) { q = d; break; }
+    }
+    quitMap[key] = q;
+  });
+  function quitDayOf(p) { return quitMap[p.n + "#" + (p.id || "")] || null; }
+
+  /* 归一化某天班次：work / rest / leave / empty */
+  function normDay(p, d) {
+    const q = quitDayOf(p);
+    if (q && d > q) return { kind: "empty", code: "—" };
+    const raw = (p.d[String(d)] || "").trim();
+    if (!raw || raw.indexOf("离职") >= 0) return { kind: "empty", code: "—" };
+    if (raw === "O" || raw === "休" || raw.indexOf("休息") >= 0) return { kind: "rest", code: "O" };
+    if (/假/.test(raw) || raw.indexOf("请假") >= 0) return { kind: "leave", code: raw };
+    const m = raw.match(/^(职能|巡查)([A-Za-z0-9]+)$/);
+    return { kind: "work", code: m ? m[2] : raw };
+  }
+
+  /* 姓名解析：精确优先，其次唯一模糊命中 */
+  function resolvePerson(text) {
+    const q = (text || "").trim();
+    if (!q) return { err: "empty" };
+    const exact = allPeople.filter(function (p) { return p.n === q; });
+    if (exact.length === 1) return { p: exact[0] };
+    const sub = allPeople.filter(function (p) { return p.n.indexOf(q) >= 0; });
+    if (sub.length === 1) return { p: sub[0] };
+    if (!sub.length) return { err: "none" };
+    return { err: "multi", cands: sub.slice(0, 8) };
+  }
+
+  /* 输入框自动补全 */
+  function bindSugg(input, box, other) {
+    function hide() { box.style.display = "none"; box.innerHTML = ""; }
+    function show() {
+      const q = input.value.trim();
+      if (!q) { hide(); return; }
+      const hits = allPeople.filter(function (p) { return p.n.indexOf(q) >= 0; }).slice(0, 8);
+      if (!hits.length) {
+        box.innerHTML = '<div class="cp-sugg-empty">没有匹配的姓名</div>';
+        box.style.display = "block";
+        return;
+      }
+      box.innerHTML = hits.map(function (p) {
+        return '<div class="cp-sugg-item" data-name="' + escapeHtml(p.n) + '">' +
+          '<span>' + escapeHtml(p.n) + '</span>' +
+          '<span class="g">' + escapeHtml(p.g) + '</span>' +
+        '</div>';
+      }).join("");
+      box.style.display = "block";
+    }
+    input.addEventListener("input", show);
+    input.addEventListener("focus", show);
+    input.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") hide();
+      if (e.key === "Enter") { hide(); runCompare(); }
+    });
+    input.addEventListener("blur", function () { setTimeout(hide, 120); });
+    box.addEventListener("mousedown", function (e) {
+      const it = e.target.closest(".cp-sugg-item");
+      if (!it) return;
+      e.preventDefault();
+      input.value = it.dataset.name;
+      hide();
+      if (other && !other.value.trim()) other.focus();
+    });
+  }
+  bindSugg(inputA, suggA, inputB);
+  bindSugg(inputB, suggB, null);
+
+  swapBtn.addEventListener("click", function () {
+    const t = inputA.value;
+    inputA.value = inputB.value;
+    inputB.value = t;
+  });
+
+  function fmtD(d) { return MONTH_NUM + "/" + d; }
+
+  function errBox(msg) {
+    out.innerHTML = '<div class="cp-err">' + msg + '</div>';
+  }
+
+  function renderCompare(pa, pb) {
+    const rows = [];
+    const sameWork = [];
+    const sameRest = [];
+    let diffCnt = 0, leaveCnt = 0, emptyCnt = 0;
+
+    for (let d = 1; d <= DAYS_N; d++) {
+      const a = normDay(pa, d);
+      const b = normDay(pb, d);
+      let type;
+      if (a.kind === "empty" || b.kind === "empty") {
+        type = "empty"; emptyCnt++;
+      } else if (a.kind === "leave" || b.kind === "leave") {
+        type = "leave"; leaveCnt++;
+      } else if (a.kind === "work" && b.kind === "work") {
+        if (a.code === b.code) { type = "same"; sameWork.push({ d: d, code: a.code }); }
+        else { type = "diff"; diffCnt++; }
+      } else if (a.kind === "rest" && b.kind === "rest") {
+        type = "sameRest"; sameRest.push(d);
+      } else {
+        type = "diff"; diffCnt++;
+      }
+      rows.push({ d: d, a: a, b: b, type: type });
+    }
+
+    /* 相同班次按班次分组、按班次顺序排序 */
+    const byCode = {};
+    sameWork.forEach(function (s) { (byCode[s.code] = byCode[s.code] || []).push(s.d); });
+    const codes = Object.keys(byCode).sort(function (x, y) { return shiftRank(x) - shiftRank(y); });
+
+    let html = "";
+    html += '<div class="cp-summary">' +
+      escapeHtml(pa.n) + ' × ' + escapeHtml(pb.n) +
+      '　同班 <span style="font-size:17px">' + sameWork.length + '</span> 天 · 同休 <span style="font-size:17px">' + sameRest.length + '</span> 天' +
+      '<span class="sub">本月共 ' + DAYS_N + ' 天：其余班次不同 ' + diffCnt + ' 天 · 含请假 ' + leaveCnt + ' 天 · 无排班/离职 ' + emptyCnt + ' 天（均不计入相同班次）' +
+      (pa === pb ? '　⚠ 两次输入为同一人，故班次全部相同' : '') +
+      '</span></div>';
+
+    html += '<div class="cp-block-title">相同班次（按班次分组）</div>';
+    if (!codes.length) {
+      html += '<div class="cp-err">本月两人没有相同的上班班次</div>';
+    } else {
+      codes.forEach(function (code) {
+        const ds = byCode[code];
+        const mean = SHIFT_MEANING[code] || "";
+        html += '<div class="cp-row">' +
+          '<span class="cp-code" title="' + escapeHtml(mean || "表中未注明") + '">' + escapeHtml(code) + '</span>' +
+          '<span class="cp-dates">' + ds.map(function (d) { return '<b>' + fmtD(d) + '</b>'; }).join("、") + '</span>' +
+          '<span class="cp-count">' + ds.length + ' 天</span>' +
+        '</div>';
+      });
+    }
+
+    html += '<div class="cp-block-title">同时休息</div>';
+    if (!sameRest.length) {
+      html += '<div class="cp-err">本月两人没有共同的休息日</div>';
+    } else {
+      html += '<div class="cp-row">' +
+        '<span class="cp-code rest" title="O 休息">O</span>' +
+        '<span class="cp-dates">' + sameRest.map(function (d) { return '<b>' + fmtD(d) + '</b>'; }).join("、") + '</span>' +
+        '<span class="cp-count">' + sameRest.length + ' 天</span>' +
+      '</div>';
+    }
+
+    html += '<div class="cp-block-title">月历对照（绿色 = 同班，灰色 = 同休）</div>';
+    html += '<div class="cp-cal">';
+    rows.forEach(function (r) {
+      const wd = WD[new Date(2026, 10, r.d).getDay()];
+      let cls = "", tag = "";
+      if (r.type === "same") { cls = " same"; tag = "同班"; }
+      else if (r.type === "sameRest") { cls = " sameRest"; tag = "同休"; }
+      else if (r.type === "leave") { cls = " leave"; tag = "请假"; }
+      else if (r.type === "empty") { cls = " empty"; tag = "—"; }
+      else { cls = " diff"; tag = ""; }
+      if (todayDay === r.d) cls += " today";
+      html += '<div class="cp-cal-cell' + cls + '">' +
+        '<div class="cp-cal-day">' + fmtD(r.d) + ' 周' + wd + '</div>' +
+        '<div class="cp-cal-shifts">' + escapeHtml(r.a.code) + ' / ' + escapeHtml(r.b.code) + '</div>' +
+        '<div class="cp-cal-tag">' + tag + '</div>' +
+      '</div>';
+    });
+    html += '</div>';
+
+    html += '<div class="cp-legend">' +
+      '<div class="cp-legend-item"><div class="cp-legend-dot" style="background:var(--accent-soft);border-color:#B4D5C9"></div>同班</div>' +
+      '<div class="cp-legend-item"><div class="cp-legend-dot" style="background:var(--rest-soft)"></div>同休</div>' +
+      '<div class="cp-legend-item"><div class="cp-legend-dot" style="background:var(--leave-soft)"></div>请假</div>' +
+      '<div class="cp-legend-item"><div class="cp-legend-dot" style="background:#fff"></div>班次不同</div>' +
+      '<div class="cp-legend-item"><div class="cp-legend-dot" style="background:var(--bg)"></div>无排班/离职</div>' +
+    '</div>';
+    html += '<div class="cp-note">格子内为「第一位 / 第二位」当天的班次代码；鼠标悬停左侧班次代码可查看时段说明。</div>';
+
+    out.innerHTML = html;
+  }
+
+  function runCompare() {
+    inputA.classList.remove("err");
+    inputB.classList.remove("err");
+    const ra = resolvePerson(inputA.value);
+    const rb = resolvePerson(inputB.value);
+
+    if (ra.err === "empty" || rb.err === "empty") {
+      if (ra.err === "empty") inputA.classList.add("err");
+      if (rb.err === "empty") inputB.classList.add("err");
+      errBox("请先在两个输入框里填写姓名");
+      return;
+    }
+    if (ra.err === "none" || rb.err === "none") {
+      const which = ra.err === "none" ? "第一位" : "第二位";
+      if (ra.err === "none") inputA.classList.add("err"); else inputB.classList.add("err");
+      errBox("没有找到" + which + "输入的姓名，请检查拼写，或从输入框下方提示中选择");
+      return;
+    }
+    if (ra.err === "multi" || rb.err === "multi") {
+      const list = (ra.err === "multi" ? ra.cands : rb.cands).map(function (p) { return p.n + "（" + p.g + "）"; });
+      errBox("匹配到多个人，请填写完整姓名：" + list.join("、"));
+      return;
+    }
+    renderCompare(ra.p, rb.p);
+  }
+
+  runBtn.addEventListener("click", runCompare);
+  out.innerHTML = '<div class="cp-err">输入两位同事姓名后点「开始对比」</div>';
 })();
 
 </script>
